@@ -6,9 +6,49 @@
 
 generator client {
   provider = "prisma-client"
+  previewFeatures = ["driverAdapters", "queryCompiler"]
   output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Roles{
+  SUPER_ADMIN
+  ADMIN
+  ACCOUNTANT
+  FIELD_COORDINATOR
+  SMM
+  CREATIVE
+  MODERATOR
+  MEMBER
+}
+
+
+model User{
+  id String @id @unique @default(uuid())
+
+  login String
+  password String
+  role Roles @default(MEMBER)
+
+  name String
+  surname String
+  patronymic String?
+
+  email String?
+  emailHash String? 
+
+  phone String
+  phoneHash String 
+
+  telegram String
+  telegramHash String 
+
+  is2FAEnabled Boolean @default(false)
+
+  createdAt DateTime @map("created_at") @default(now())
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("user")
 }
